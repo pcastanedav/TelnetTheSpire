@@ -15,6 +15,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.events.shrines.FaceTrader;
+import telnetthespire.commands.Executor;
 import telnetthespire.patches.InputActionPatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,7 +83,8 @@ public class TelnetTheSpire implements PostInitializeSubscriber, PostUpdateSubsc
     public void receivePreUpdate() {
         if(messageAvailable()) {
             try {
-                boolean stateChanged = CommandExecutor.executeCommand(readMessage());
+                //boolean stateChanged = CommandExecutor.executeCommand(readMessage());
+                boolean stateChanged = Executor.execute(readMessage());
                 if(stateChanged) {
                     GameStateListener.registerCommandExecution();
                 }
