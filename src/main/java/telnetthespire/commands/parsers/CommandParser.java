@@ -28,8 +28,12 @@ public abstract class CommandParser {
         return Arrays.stream(this.getClass().getAnnotationsByType(Alias.class)).map(Alias::value);
     }
 
-    public String getName() {
+    public String getAnnotatedName() {
         return _commandName;
+    }
+
+    public String getName() {
+        return getAnnotatedName();
     }
 
     public boolean isAvailable () {

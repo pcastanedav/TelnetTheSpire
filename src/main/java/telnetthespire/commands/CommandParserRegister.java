@@ -21,13 +21,15 @@ public class CommandParserRegister {
         registerParser(new AbandonParser());
         registerParser(new ChooseParser());
         registerParser(new ContinueParser());
+        registerParser(new ConfirmParser());
         registerParser(new SaveParser());
         registerParser(new StartParser());
         registerParser(new StateParser());
         registerParser(new PlayParser());
         registerParser(new KeyParser());
+        registerParser(new EndParser());
 
-        getParsers().map(CommandParser::getName).forEach(name -> {
+        getParsers().map(CommandParser::getAnnotatedName).forEach(name -> {
             for (int i = 1; i <= name.length() - 1; i++) {
                 String alias = name.substring(0, i);
                 if (_aliases.putIfAbsent(alias, name) == null) {
@@ -39,7 +41,7 @@ public class CommandParserRegister {
     }
 
     private static void registerParser(CommandParser parser) {
-        String name = parser.getName();
+        String name = parser.getAnnotatedName();
         _parsers.put(name, parser);
         logger.info("Registered parser for command: " + name);
         parser.getAliases().forEach(alias -> {
