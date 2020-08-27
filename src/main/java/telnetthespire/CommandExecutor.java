@@ -38,7 +38,6 @@ import com.megacrit.cardcrawl.helpers.PotionHelper;
 import com.megacrit.cardcrawl.screens.stats.StatsScreen;
 import com.megacrit.cardcrawl.rooms.RestRoom;
 
-import telnetthespire.commands.Executor;
 import telnetthespire.patches.InputActionPatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,9 +66,8 @@ public class CommandExecutor {
                 executeEndCommand();
                 return true;
             case "choose":
-                return Executor.execute(command);
-                //executeChooseCommand(tokens);
-                //return true;
+                executeChooseCommand(tokens);
+                return true;
             case "potion":
                 executePotionCommand(tokens);
                 return true;
@@ -84,9 +82,8 @@ public class CommandExecutor {
                 executeCancelCommand();
                 return true;
             case "start":
-                return Executor.execute(command);
-                //executeStartCommand(tokens);
-                //return true;
+                executeStartCommand(tokens);
+                return true;
 	    case "continue":
 		executeContinueCommand(tokens);
 		return false;

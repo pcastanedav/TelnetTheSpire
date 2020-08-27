@@ -4,61 +4,40 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import telnetthespire.ChoiceScreenUtils;
 import telnetthespire.InvalidCommandException;
-import telnetthespire.commands.*;
-import telnetthespire.commands.annotations.Alias;
-import telnetthespire.commands.annotations.Name;
+import telnetthespire.commands.annotations.Argument;
+import telnetthespire.commands.arguments.ChooseArguments;
+import telnetthespire.commands.parsers.ChooseParser;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
-import static telnetthespire.commands.Utils.isInDungeon;
-/*
-@Name("choose")
-@Alias("c")
-class Choose extends Command {
+public class Choose extends CommandHandler<ChooseArguments> {
 
-    @Override
-    public boolean isAvailable() {
-        Optional<Command> playCommand = Executor.getHandler("play");
-        if (playCommand.isPresent())
-            return isInDungeon()
-                && !playCommand.get().isAvailable()
-                && !ChoiceScreenUtils.getCurrentChoiceList().isEmpty();
-        return false;
+    public Choose(ChooseParser parser, ChooseArguments arguments) {
+        super(parser, arguments);
     }
 
     @Override
-    public boolean execute(Parameters parameters) throws InvalidCommandException {
-
-        if (parameters == null)
-            throw new InvalidCommandException(new String[]{getName()}, InvalidCommandException.InvalidCommandFormat.MISSING_ARGUMENT, " A choice is required.");
-
-        int choice_index = getValidChoiceIndex(parameters);
-
-        ChoiceScreenUtils.executeChoice(choice_index);
-
+    public boolean execute() throws InvalidCommandException {
+        ChoiceScreenUtils.executeChoice(getValidChoiceIndex());
         return true;
     }
 
-    private int getValidChoiceIndex(Parameters parameter) throws InvalidCommandException {
+    private int getValidChoiceIndex() throws InvalidCommandException {
 
         ArrayList<String> validChoices = ChoiceScreenUtils.getCurrentChoiceList();
 
-        String choice = parameter.toString();
+        if(validChoices.size() == 0)
+            throw invalidCommand("The choice command is not implemented on this screen.");
 
-        int choice_index = validChoices.contains(choice)
-                ? validChoices.indexOf(choice)
-                : parameter.toIndex();
+        int index = validChoices.indexOf(arguments.Choice);
+        if (index < 0 && arguments.Index >= 0) index = arguments.Index;
 
-        if (choice_index < 0 || choice_index >= validChoices.size())
-            throw new InvalidCommandException(new String[]{getName()}, InvalidCommandException.InvalidCommandFormat.OUT_OF_BOUNDS, choice);
+        if (index < 0 || index >= validChoices.size())
+            throw invalidCommand(InvalidCommandException.InvalidCommandFormat.OUT_OF_BOUNDS, arguments.Choice);
 
-        if (validChoices.get(choice_index).contains("add potion") && AbstractDungeon.player.potions.stream().noneMatch(potion -> potion instanceof PotionSlot))
-            throw new InvalidCommandException("You first need to discard a potion.");
+        if (validChoices.get(index).contains("add potion") && AbstractDungeon.player.potions.stream().noneMatch(potion -> potion instanceof PotionSlot))
+            throw invalidCommand("You first need to discard a potion.");
 
-        return choice_index;
+        return index;
     }
-
 }
-
- */

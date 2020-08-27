@@ -1,25 +1,23 @@
 package telnetthespire.commands.handlers;
 
-import telnetthespire.InvalidCommandException;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import telnetthespire.GameStateListener;
+import telnetthespire.commands.arguments.KeyArguments;
+import telnetthespire.commands.parsers.KeyParser;
+import telnetthespire.patches.InputActionPatch;
 
-import static telnetthespire.commands.Utils.isInDungeon;
+public class Key extends CommandHandler<KeyArguments> {
 
-/*
-public class Key implements Command {
-
-    @Override
-    public String[] getNames() {
-        return new String[] {"key"};
+    public Key(KeyParser parser, KeyArguments arguments) {
+        super(parser, arguments);
     }
-
     @Override
-    public boolean isAvailable() {
-        return isInDungeon();
-    }
+    public boolean execute() {
 
-    @Override
-    public void execute(String[] tokens) throws InvalidCommandException {
-
+        InputActionPatch.doKeypress = true;
+        InputActionPatch.key = arguments.KeyCode;
+        InputHelper.updateFirst();
+        GameStateListener.setTimeout(arguments.Timeout);
+        return true;
     }
 }
-*/

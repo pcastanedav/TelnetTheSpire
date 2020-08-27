@@ -1,28 +1,30 @@
 package telnetthespire.commands.handlers;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.saveAndContinue.SaveAndContinue;
+import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
+import com.megacrit.cardcrawl.screens.stats.StatsScreen;
+import telnetthespire.TelnetTheSpire;
+import telnetthespire.commands.arguments.NoArguments;
+import telnetthespire.commands.parsers.AbandonParser;
 
-/*
-@Name("abandon")
-class Abandon extends Command {
+public class Abandon extends CommandHandler<NoArguments> {
 
-    static {
-        Executor.registerHandler(new Abandon());
+    public Abandon(AbandonParser abandonParser) {
+        super(abandonParser);
     }
 
     @Override
-    public boolean isAvailable() {
-        return !isInDungeon()
-            && CardCrawlGame.characterManager.anySaveFileExists();
-    }
-
-    @Override
-    public boolean execute(Parameters parameters) {
+    public boolean execute() {
 
         CardCrawlGame.chosenCharacter = (CardCrawlGame.characterManager.loadChosenCharacter()).chosenClass;
 
         AbstractPlayer player = AbstractDungeon.player;
         AbstractPlayer.PlayerClass pClass = player.chosenClass;
 
-        Command.logger.info("Abandoning run with " + pClass.name());
+        logger.info("Abandoning run with " + pClass.name());
 
         SaveFile file = SaveAndContinue.loadSaveFile(pClass);
 
@@ -38,10 +40,9 @@ class Abandon extends Command {
 
         CardCrawlGame.mainMenuScreen.abandonedRun = true;
         CardCrawlGame.mainMenuScreen.isSettingsUp = true;
-        TelnetTheSpire.mustSendGameState = true;
 
+        TelnetTheSpire.mustSendGameState = true;
         return false;
     }
-}
 
- */
+}

@@ -1,24 +1,27 @@
 package telnetthespire.commands.handlers;
 
-import telnetthespire.InvalidCommandException;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.rooms.RestRoom;
+import telnetthespire.commands.arguments.NoArguments;
+import telnetthespire.commands.parsers.CommandParser;
 
-import static telnetthespire.commands.Utils.isInDungeon;
-/*
-public class Save implements Command {
+public class Save extends CommandHandler<NoArguments> {
 
-    @Override
-    public String[] getNames() {
-        return new String[] {"save"};
+    public Save(CommandParser parser) {
+        super(parser);
     }
 
     @Override
-    public boolean isAvailable() {
-        return isInDungeon();
-    }
-
-    @Override
-    public void execute(String[] tokens) throws InvalidCommandException {
-
+    public boolean execute() {
+        CardCrawlGame.music.fadeAll();
+        AbstractDungeon.getCurrRoom().clearEvent();
+        AbstractDungeon.closeCurrentScreen();
+        CardCrawlGame.startOver();
+        if (RestRoom.lastFireSoundId != 0L)
+            CardCrawlGame.sound.fadeOut("REST_FIRE_WET", RestRoom.lastFireSoundId);
+        if (!AbstractDungeon.player.stance.ID.equals("Neutral") && AbstractDungeon.player.stance != null)
+            AbstractDungeon.player.stance.stopIdleSfx();
+        return false;
     }
 }
-*/

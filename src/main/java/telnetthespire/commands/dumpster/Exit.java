@@ -1,13 +1,13 @@
-package telnetthespire.commands.handlers;
+package telnetthespire.commands.dumpster;
 
 import telnetthespire.InvalidCommandException;
 
 /*
-public class Disconnect implements Command {
+public class Exit implements Command {
 
     @Override
     public String[] getNames() {
-        return new String[] {"disconnect"};
+        return new String[] {"exit"};
     }
 
     @Override

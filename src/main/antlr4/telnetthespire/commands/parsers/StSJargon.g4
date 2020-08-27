@@ -1,20 +1,20 @@
 grammar StSJargon;
 
-order: command (command | implicit)* NEWLINE;
+order: command (command | implicit)* (NEWLINE | <EOF>);
 command: commandName argument*;
 implicit: ',' argument+;
-commandName: '.' WORD;
+commandName: '.' TEXTARG;
 argument: (textArgument | floatArgument | naturalArgument);
 
+textArgument: TEXTARG;
 floatArgument: FLOAT;
 naturalArgument: NATURAL;
-textArgument: (WORD|DIGIT)+;
 
-fragment LETTER: [a-zA-Z];
+fragment LETTER: [a-zA-Z_];
 
-WORD: LETTER+;
-NATURAL: ( '0' | [1-9] DIGIT*);
+NATURAL: ( '0' | [1-9] DIGIT*) ;
 FLOAT: NATURAL ('.' DIGIT+)?;
+TEXTARG: (LETTER|DIGIT)+;
 DIGIT: [0-9];
 WHITESPACE : (' ' | '\t') -> skip;
 NEWLINE:'\r'? '\n' ;

@@ -1,19 +1,17 @@
-package telnetthespire.commands.handlers;
+package telnetthespire.commands.dumpster;
 
 import telnetthespire.InvalidCommandException;
-
-import static telnetthespire.commands.Utils.isInDungeon;
 /*
-public class Wait implements Command {
+public class Help implements Command {
 
     @Override
     public String[] getNames() {
-        return new String[] {"wait"};
+        return new String[] {"help"};
     }
 
     @Override
     public boolean isAvailable() {
-        return isInDungeon();
+        return true;
     }
 
     @Override
@@ -21,4 +19,5 @@ public class Wait implements Command {
 
     }
 }
-*/
+
+ */

@@ -1,24 +1,23 @@
-package telnetthespire.commands.handlers;
+package telnetthespire.commands.dumpster;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.potions.PotionSlot;
 import telnetthespire.InvalidCommandException;
 
 import static telnetthespire.commands.Utils.isInDungeon;
 
 /*
-public class End implements Command {
+public class Potion implements Command {
 
     @Override
     public String[] getNames() {
-        return new String[] {"end"};
+        return new String[] {"potion"};
     }
 
     @Override
     public boolean isAvailable() {
         return isInDungeon()
-            && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT
-            && !AbstractDungeon.isScreenUp;
+            && AbstractDungeon.player.potions.stream().anyMatch(potion -> !(potion instanceof PotionSlot));
     }
 
     @Override

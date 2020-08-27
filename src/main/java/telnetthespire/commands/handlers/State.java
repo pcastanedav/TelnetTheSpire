@@ -1,23 +1,18 @@
 package telnetthespire.commands.handlers;
-
 import telnetthespire.TelnetTheSpire;
-import telnetthespire.commands.Command;
-import telnetthespire.commands.annotations.Name;
+import telnetthespire.commands.arguments.NoArguments;
+import telnetthespire.commands.parsers.StateParser;
 
-import java.util.Optional;
-import java.util.Vector;
+public class State extends CommandHandler<NoArguments> {
 
-@Name("state")
-public class State extends Command {
-
-    @Override
-    public boolean isAvailable() {
-        return true;
+    public State(StateParser stateParser) {
+        super(stateParser);
     }
 
     @Override
-    public boolean execute(Optional<Vector<Object>> parser) {
+    public boolean execute() {
         TelnetTheSpire.mustSendGameState = true;
         return false;
     }
+
 }

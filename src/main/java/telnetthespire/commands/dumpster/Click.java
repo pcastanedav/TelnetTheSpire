@@ -1,4 +1,4 @@
-package telnetthespire.commands.handlers;
+package telnetthespire.commands.dumpster;
 
 /*
 @Name("click")

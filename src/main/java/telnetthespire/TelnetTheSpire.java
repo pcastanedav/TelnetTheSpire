@@ -15,7 +15,10 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.events.shrines.FaceTrader;
-import telnetthespire.commands.Executor;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import telnetthespire.commands.Command;
+import telnetthespire.commands.CommandParserRegister;
+import telnetthespire.commands.JargonParser;
 import telnetthespire.patches.InputActionPatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,8 +27,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Properties;
+import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -80,14 +86,16 @@ public class TelnetTheSpire implements PostInitializeSubscriber, PostUpdateSubsc
         TelnetTheSpire mod = new TelnetTheSpire();
     }
 
+    private final ConcurrentLinkedDeque<Command> commandQueue = new ConcurrentLinkedDeque<>();
+
     public void receivePreUpdate() {
         if(messageAvailable()) {
+            if (!commandQueue.isEmpty())
+                commandQueue.clear();
             try {
-                //boolean stateChanged = CommandExecutor.executeCommand(readMessage());
-                boolean stateChanged = Executor.execute(readMessage());
-                if(stateChanged) {
-                    GameStateListener.registerCommandExecution();
-                }
+                commandQueue.addAll(JargonParser.parse(readMessage()));
+                if (!commandQueue.isEmpty())
+                    executeCommand();
             } catch (InvalidCommandException e) {
                 HashMap<String, Object> error = new HashMap<>();
                 error.put("error", e.getMessage());
@@ -97,20 +105,39 @@ public class TelnetTheSpire implements PostInitializeSubscriber, PostUpdateSubsc
         }
     }
 
+    private void executeCommand() {
+        try {
+            Command command = commandQueue.poll();
+            if (command != null && command.executeIfAvailable())
+                GameStateListener.registerCommandExecution();
+        } catch (InvalidCommandException e) {
+            HashMap<String, Object> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            error.put("ready_for_command", GameStateListener.isWaitingForCommand());
+            sendState(error);
+        }
+    }
+
     public void receivePostInitialize() {
         setUpOptionsMenu();
-	BaseMod.addEvent((new AddEventParams.Builder(FaceTrader.ID, FaceTrader.class))
-			 .eventType(EventUtils.EventType.FULL_REPLACE).overrideEvent("Match and Keep!")
-			 .create());
+        BaseMod
+        .addEvent((new AddEventParams.Builder(FaceTrader.ID, FaceTrader.class))
+        .eventType(EventUtils.EventType.FULL_REPLACE).overrideEvent("Match and Keep!")
+        .create());
     }
 
     public void receivePostUpdate() {
+
         if(!mustSendGameState && GameStateListener.checkForMenuStateChange()) {
             mustSendGameState = true;
         }
         if(mustSendGameState) {
-            sendGameState();
-            mustSendGameState = false;
+            if (commandQueue.isEmpty()) {
+                sendGameState();
+                mustSendGameState = false;
+            } else {
+                executeCommand();
+            }
         }
         InputActionPatch.doKeypress = false;
     }

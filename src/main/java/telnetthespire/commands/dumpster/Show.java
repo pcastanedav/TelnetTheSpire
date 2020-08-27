@@ -1,18 +1,19 @@
-package telnetthespire.commands.handlers;
+package telnetthespire.commands.dumpster;
 
 import telnetthespire.InvalidCommandException;
 
+import static telnetthespire.commands.Utils.isInDungeon;
 /*
-public class Exit implements Command {
+public class Show implements Command {
 
     @Override
     public String[] getNames() {
-        return new String[] {"exit"};
+        return new String[] {"show"};
     }
 
     @Override
     public boolean isAvailable() {
-        return true;
+        return isInDungeon();
     }
 
     @Override

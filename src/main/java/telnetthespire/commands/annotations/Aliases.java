@@ -1,7 +1,5 @@
 package telnetthespire.commands.annotations;
 
-import telnetthespire.commands.annotations.Alias;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
