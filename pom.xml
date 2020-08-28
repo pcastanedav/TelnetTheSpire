@@ -59,6 +59,7 @@
 
     <build>
         <finalName>TelnetTheSpire</finalName>
+        <testSourceDirectory>src/test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

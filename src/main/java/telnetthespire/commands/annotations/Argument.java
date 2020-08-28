@@ -7,6 +7,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(Arguments.class)
 public @interface Argument {
-    ArgumentType value();
-    boolean required();
+    String name();
+    ArgumentType type() default ArgumentType.TEXT;
+    boolean required() default false;
 }

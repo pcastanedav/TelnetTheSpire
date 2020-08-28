@@ -30,8 +30,14 @@ public class JargonListener extends StSJargonBaseListener {
 
     @Override
     public void enterCommand(StSJargonParser.CommandContext ctx)  {
+
         parser = getParser(ctx.commandName().TEXTARG().getText().toLowerCase());
+
+        if (ctx.argument().size() < parser.getMinimumArgumentCount())
+            throw parser.invalidUsage(InvalidCommandException.InvalidCommandFormat.MISSING_ARGUMENT);
+
         arguments = new Vector<>(ctx.argument().size());
+
     }
 
     @Override
@@ -41,6 +47,10 @@ public class JargonListener extends StSJargonBaseListener {
 
     @Override
     public void enterImplicit(StSJargonParser.ImplicitContext ctx) {
+
+        if (ctx.argument().size() < parser.getMinimumArgumentCount())
+            throw parser.invalidUsage(InvalidCommandException.InvalidCommandFormat.MISSING_ARGUMENT);
+
         arguments = new Vector<>(ctx.argument().size());
     }
 
@@ -51,6 +61,11 @@ public class JargonListener extends StSJargonBaseListener {
 
     @Override
     public void enterNaturalArgument(StSJargonParser.NaturalArgumentContext ctx) {
+
+        ctx.
+        Object argument = arguments.firstElement();
+        if (!(argument instanceof String))
+            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, argument.toString());
         arguments.add(Integer.parseInt(ctx.getText()));
     }
 

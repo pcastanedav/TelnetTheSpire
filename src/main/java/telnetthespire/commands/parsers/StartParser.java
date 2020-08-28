@@ -9,8 +9,10 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.misc.Triple;
 import telnetthespire.InvalidCommandException;
 import telnetthespire.commands.Command;
+import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.annotations.Name;
 import telnetthespire.commands.annotations.Usage;
+import telnetthespire.commands.arguments.ArgumentType;
 import telnetthespire.commands.arguments.StartArguments;
 import telnetthespire.commands.handlers.Start;
 
@@ -20,6 +22,9 @@ import java.util.stream.Stream;
 import static telnetthespire.commands.Utils.isInDungeon;
 
 @Name("start")
+@Argument(name="SelectedClass", type = ArgumentType.TEXT, required = true)
+@Argument(name="AscensionLevel", type = ArgumentType.NATURAL)
+@Argument(name="Seed")
 @Usage("\nUsage: start ironclad|silent|defect|watcher [AscensionLevel] [seed]")
 public class StartParser extends CommandParser {
 
