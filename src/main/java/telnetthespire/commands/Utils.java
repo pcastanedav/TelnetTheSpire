@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.input.InputAction;
 import com.megacrit.cardcrawl.helpers.input.InputActionSet;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -41,6 +42,12 @@ public class Utils {
         keyCodes.put("CARD_8", InputActionSet.selectCard_8);
         keyCodes.put("CARD_9", InputActionSet.selectCard_9);
         keyCodes.put("CARD_10", InputActionSet.selectCard_10);
+    }
+
+    public static <T extends Enum<T>> Optional<T> enumSortOfMatch(Class<T> enumType, String name) {
+        return Arrays.stream(enumType.getEnumConstants())
+            .filter(constant -> constant.toString().toUpperCase().startsWith(name.toUpperCase()))
+            .findFirst();
     }
 
     public static boolean isInDungeon() {

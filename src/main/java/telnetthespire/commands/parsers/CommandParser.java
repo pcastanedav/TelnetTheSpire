@@ -3,6 +3,7 @@ package telnetthespire.commands.parsers;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import telnetthespire.InvalidCommandException;
 import telnetthespire.commands.Command;
+import telnetthespire.commands.Utils;
 import telnetthespire.commands.annotations.Alias;
 import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.annotations.Name;
@@ -44,6 +45,12 @@ public abstract class CommandParser {
            _usage = this.getClass().getAnnotation(Usage.class).value();
         }
         _commandName = this.getClass().getAnnotation(Name.class).value();
+    }
+
+    public <T extends Enum<T>> T getEnumValue (Class<T> enumType, String input) {
+        return Utils.enumSortOfMatch(enumType, input).orElseThrow(() ->
+            invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, input)
+        );
     }
 
     public Stream<String> getAliases() {
