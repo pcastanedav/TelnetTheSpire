@@ -1,7 +1,6 @@
 package telnetthespire.commands.parsers;
 
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.apache.commons.lang3.tuple.Pair;
 import telnetthespire.InvalidCommandException;
 import telnetthespire.commands.Command;
 import telnetthespire.commands.annotations.Alias;
@@ -12,7 +11,6 @@ import telnetthespire.commands.arguments.ArgumentType;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
@@ -22,23 +20,18 @@ public abstract class CommandParser {
 
     protected final String _commandName;
     protected String _usage;
-    protected final HashMap<Integer, String> _argumentIndexes;
+    protected final List<String> _argumentNames;
     protected final HashMap<String, EnumSet<ArgumentType>> _signature;
     protected final List<String> _requiredArguments;
 
     protected CommandParser() {
 
-
         List<Argument> arguments = Arrays.stream(this.getClass().getAnnotationsByType(Argument.class))
             .sorted(comparing(Argument::required))
             .collect(toList());
-        _argumentIndexes = IntStream.range(0, arguments.size())
-                .mapToObj(i -> Pair.of(i, arguments.get(i)))
-                .collect(toMap(
-                    Pair::getKey,
-                i -> arguments.get((Integer) i),
-                (a, b) -> a,
-                HashMap::new));
+
+        _argumentNames = arguments.stream().map(Argument::name).distinct().collect(toList());
+
         // Converts all the arguments specified with the Argument annotation into a map
         _signature =  arguments.stream().collect(toMap(
            Argument::name,
@@ -79,12 +72,10 @@ public abstract class CommandParser {
         return _requiredArguments.size();
     }
 
-    public boolean isArgumentRequired (String name) {
-       return _requiredArguments.contains(name);
-    }
-
     public EnumSet<ArgumentType> getArgumentSignature(int index) {
-        _signature.keySet().
+        if (index < 0 || index >= _argumentNames.size())
+            return EnumSet.noneOf(ArgumentType.class);
+        String name = _argumentNames.get(index);
         return _signature.containsKey(name)
             ? _signature.get(name)
             : EnumSet.noneOf(ArgumentType.class);

@@ -3,6 +3,7 @@ package telnetthespire.commands;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import telnetthespire.InvalidCommandException;
+import telnetthespire.commands.arguments.ArgumentType;
 import telnetthespire.commands.parsers.CommandParser;
 import telnetthespire.commands.parsers.StSJargonBaseListener;
 import telnetthespire.commands.parsers.StSJargonParser;
@@ -62,20 +63,28 @@ public class JargonListener extends StSJargonBaseListener {
     @Override
     public void enterNaturalArgument(StSJargonParser.NaturalArgumentContext ctx) {
 
-        ctx.
-        Object argument = arguments.firstElement();
-        if (!(argument instanceof String))
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, argument.toString());
+        if (!parser.getArgumentSignature(arguments.size()).contains(ArgumentType.NATURAL))
+            throw parser.invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, ctx.getText());
+
         arguments.add(Integer.parseInt(ctx.getText()));
+
     }
 
     @Override
     public void enterTextArgument(StSJargonParser.TextArgumentContext ctx) {
+
+        if (!parser.getArgumentSignature(arguments.size()).contains(ArgumentType.TEXT))
+            throw parser.invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, ctx.getText());
+
         arguments.add(ctx.getText());
     }
 
     @Override
     public void enterFloatArgument(StSJargonParser.FloatArgumentContext ctx) {
+
+        if (!parser.getArgumentSignature(arguments.size()).contains(ArgumentType.FLOAT))
+            throw parser.invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, ctx.getText());
+
         arguments.add(Float.parseFloat(ctx.getText()));
     }
 

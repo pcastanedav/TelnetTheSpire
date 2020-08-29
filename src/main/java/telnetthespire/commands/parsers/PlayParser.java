@@ -7,8 +7,10 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import telnetthespire.InvalidCommandException;
 import telnetthespire.commands.Command;
 import telnetthespire.commands.annotations.Alias;
+import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.annotations.Name;
 import telnetthespire.commands.annotations.Usage;
+import telnetthespire.commands.arguments.ArgumentType;
 import telnetthespire.commands.arguments.PlayArguments;
 import telnetthespire.commands.handlers.Play;
 
@@ -18,6 +20,8 @@ import static telnetthespire.commands.Utils.isInDungeon;
 
 @Name("play")
 @Alias("p")
+@Argument(name="Card", type=ArgumentType.NATURAL, required = true)
+@Argument(name="Target", type=ArgumentType.NATURAL)
 @Usage("\nUsage: play card_index [TargetIndex]")
 public class PlayParser extends CommandParser {
 
@@ -32,43 +36,25 @@ public class PlayParser extends CommandParser {
 
     @Override
     public Command parse(Vector<Object> arguments) throws ParseCancellationException {
-
-        PlayArguments playArguments = new PlayArguments();
-
-        playArguments.Card = getCard(arguments);
-        playArguments.Target = getTargetIndex(arguments);
-
-        return new Play(this, playArguments);
+        return new Play(this, new PlayArguments() {{
+            Card = getCard(arguments);
+            Target = getTarget(arguments);
+        }});
     }
 
     private AbstractCard getCard(Vector<Object> arguments) {
 
-        if (arguments.size() < 1)
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.MISSING_ARGUMENT);
-
-        Object raw = arguments.get(0);
-
-        if (!(raw instanceof Integer))
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, raw.toString());
-
-        int card = (Integer) raw;
+        int card = (Integer) arguments.get(0);
         if(card == 0) card = 10;
         if ((card < 1) || (card > AbstractDungeon.player.hand.size()))
-            throw invalidCommand(InvalidCommandException.InvalidCommandFormat.OUT_OF_BOUNDS, raw.toString());
+            throw invalidCommand(InvalidCommandException.InvalidCommandFormat.OUT_OF_BOUNDS, String.valueOf(card));
 
-        // If we get the card during parsing we might solve the reindex issue
+        // If we get the card during parsing we solve the reindex issue
         return AbstractDungeon.player.hand.group.get(card - 1);
     }
 
-    private Integer getTargetIndex(Vector<Object> arguments) {
+    private Integer getTarget(Vector<Object> arguments) {
         if (arguments.size() < 2) return -1;
-
-        Object raw = arguments.get(1);
-
-        if (!(raw instanceof Integer))
-            throw invalidCommand(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, raw.toString());
-
-        int target = ((Integer) raw) - 1;
-        return target;
+        return ((Integer) arguments.get(1)) - 1;
     }
 }

@@ -50,14 +50,7 @@ public class StartParser extends CommandParser {
 
     private AbstractPlayer.PlayerClass getSelectedClass (Vector<Object> arguments) throws ParseCancellationException {
 
-        if (arguments.size() < 1)
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.MISSING_ARGUMENT);
-
-        Object argument = arguments.firstElement();
-        if (!(argument instanceof String))
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, argument.toString());
-
-        String character = (String) argument;
+        String character = (String) arguments.firstElement();
         return character.equalsIgnoreCase("silent")
             ? AbstractPlayer.PlayerClass.THE_SILENT
             : Stream.of(AbstractPlayer.PlayerClass.values())
@@ -70,11 +63,7 @@ public class StartParser extends CommandParser {
 
         if (arguments.size() < 2) return 0;
 
-        Object argument = arguments.get(1);
-        if (!(argument instanceof Integer))
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, argument.toString());
-
-        Integer ascensionLevel = (Integer) argument;
+        Integer ascensionLevel = (Integer) arguments.get(1);
         if (ascensionLevel < 0 || ascensionLevel > 20) {
             throw invalidCommand(InvalidCommandException.InvalidCommandFormat.OUT_OF_BOUNDS, ascensionLevel.toString());
         }
@@ -86,11 +75,7 @@ public class StartParser extends CommandParser {
 
         if (arguments.size() < 3) return new Triple<>(false, false, SeedHelper.generateUnoffensiveSeed(new Random(System.nanoTime())));
 
-        Object argument = arguments.get(2);
-        if (!(argument instanceof String))
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, argument.toString());
-
-        String seedString = (String) argument;
+        String seedString = (String) arguments.get(2);
 
         if (!seedString.toUpperCase().matches("^[A-Z0-9]+$"))
             throw invalidCommand(InvalidCommandException.InvalidCommandFormat.INVALID_ARGUMENT, seedString);

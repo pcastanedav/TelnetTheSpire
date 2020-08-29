@@ -2,11 +2,12 @@ package telnetthespire.commands.parsers;
 
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import telnetthespire.ChoiceScreenUtils;
-import telnetthespire.InvalidCommandException;
 import telnetthespire.commands.Command;
 import telnetthespire.commands.CommandParserRegister;
 import telnetthespire.commands.annotations.Alias;
+import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.annotations.Name;
+import telnetthespire.commands.arguments.ArgumentType;
 import telnetthespire.commands.arguments.ChooseArguments;
 import telnetthespire.commands.handlers.Choose;
 
@@ -18,6 +19,8 @@ import static telnetthespire.commands.Utils.isInDungeon;
 
 @Name("choose")
 @Alias("c")
+@Argument(name="Choice", type=ArgumentType.NATURAL, required=true)
+@Argument(name="Choice", type=ArgumentType.TEXT)
 public class ChooseParser extends CommandParser {
 
     @Override
@@ -30,9 +33,6 @@ public class ChooseParser extends CommandParser {
 
     @Override
     public Command parse(Vector<Object> arguments) throws ParseCancellationException {
-
-        if (arguments.size() < 1)
-            throw invalidUsage(InvalidCommandException.InvalidCommandFormat.MISSING_ARGUMENT);
 
         ChooseArguments chooseArguments = new ChooseArguments();
 
