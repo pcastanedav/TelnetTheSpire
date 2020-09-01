@@ -3,13 +3,12 @@ package telnetthespire.commands.parsers;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import telnetthespire.ChoiceScreenUtils;
 import telnetthespire.commands.Command;
+import telnetthespire.commands.Utils;
 import telnetthespire.commands.annotations.Alias;
 import telnetthespire.commands.annotations.Name;
 import telnetthespire.commands.handlers.Cancel;
 
 import java.util.Vector;
-
-import static telnetthespire.commands.Utils.isInDungeon;
 
 @Name("cancel")
 @Alias("skip")
@@ -24,7 +23,7 @@ public class CancelParser extends CommandParser {
 
     @Override
     public boolean isAvailable() {
-        return isInDungeon()
+        return Utils.isInDungeon()
                 && ChoiceScreenUtils.isCancelButtonAvailable();
     }
 

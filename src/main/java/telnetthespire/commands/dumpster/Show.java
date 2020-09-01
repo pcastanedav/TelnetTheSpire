@@ -1,8 +1,5 @@
 package telnetthespire.commands.dumpster;
 
-import telnetthespire.InvalidCommandException;
-
-import static telnetthespire.commands.Utils.isInDungeon;
 /*
 public class Show implements Command {
 

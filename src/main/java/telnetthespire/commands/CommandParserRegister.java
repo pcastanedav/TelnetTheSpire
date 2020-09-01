@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import telnetthespire.commands.parsers.*;
 
+import telnetthespire.commands.parsers.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -19,15 +20,17 @@ public class CommandParserRegister {
     static {
 
         registerParser(new AbandonParser());
+        registerParser(new CancelParser());
         registerParser(new ChooseParser());
-        registerParser(new ContinueParser());
         registerParser(new ConfirmParser());
+        registerParser(new ContinueParser());
+        registerParser(new EndParser());
+        registerParser(new KeyParser());
+        registerParser(new PlayParser());
+        registerParser(new PotionParser());
         registerParser(new SaveParser());
         registerParser(new StartParser());
         registerParser(new StateParser());
-        registerParser(new PlayParser());
-        registerParser(new KeyParser());
-        registerParser(new EndParser());
 
         getParsers().map(CommandParser::getAnnotatedName).forEach(name -> {
             for (int i = 1; i <= name.length() - 1; i++) {

@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import telnetthespire.ChoiceScreenUtils;
 import telnetthespire.InvalidCommandException;
-import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.arguments.ChooseArguments;
 import telnetthespire.commands.parsers.ChooseParser;
 

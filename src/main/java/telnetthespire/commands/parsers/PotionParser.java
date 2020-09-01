@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import telnetthespire.commands.Command;
+import telnetthespire.commands.Utils;
 import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.annotations.Name;
 import telnetthespire.commands.annotations.Usage;
@@ -12,8 +13,6 @@ import telnetthespire.commands.arguments.PotionArguments;
 import telnetthespire.commands.handlers.Potion;
 
 import java.util.Vector;
-
-import static telnetthespire.commands.Utils.isInDungeon;
 
 @Name("potion")
 @Argument(name="Action",required = true)
@@ -24,7 +23,7 @@ public class PotionParser extends CommandParser {
 
     @Override
     public boolean isAvailable() {
-        return isInDungeon()
+        return Utils.isInDungeon()
                 && AbstractDungeon.player.potions.stream().anyMatch(potion -> !(potion instanceof PotionSlot));
     }
 

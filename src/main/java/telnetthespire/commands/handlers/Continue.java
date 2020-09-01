@@ -16,12 +16,11 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.BottledFlame;
 import com.megacrit.cardcrawl.relics.BottledLightning;
 import com.megacrit.cardcrawl.relics.BottledTornado;
-import com.megacrit.cardcrawl.rooms.RestRoom;
 import com.megacrit.cardcrawl.saveAndContinue.SaveAndContinue;
 import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
 import telnetthespire.GameStateListener;
-import telnetthespire.commands.arguments.NoArguments;
 import telnetthespire.commands.parsers.CommandParser;
+import telnetthespire.commands.arguments.NoArguments;
 
 import java.util.ArrayList;
 

@@ -2,11 +2,11 @@ package telnetthespire.commands.parsers;
 
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import telnetthespire.ChoiceScreenUtils;
-import telnetthespire.commands.Command;
-import telnetthespire.commands.CommandParserRegister;
 import telnetthespire.commands.annotations.Alias;
 import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.annotations.Name;
+import telnetthespire.commands.Command;
+import telnetthespire.commands.CommandParserRegister;
 import telnetthespire.commands.arguments.ArgumentType;
 import telnetthespire.commands.arguments.ChooseArguments;
 import telnetthespire.commands.handlers.Choose;

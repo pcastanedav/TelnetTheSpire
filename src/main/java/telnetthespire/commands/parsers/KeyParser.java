@@ -2,10 +2,10 @@ package telnetthespire.commands.parsers;
 
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import telnetthespire.InvalidCommandException;
-import telnetthespire.commands.Command;
-import telnetthespire.commands.Utils;
 import telnetthespire.commands.annotations.Argument;
 import telnetthespire.commands.annotations.Name;
+import telnetthespire.commands.Command;
+import telnetthespire.commands.Utils;
 import telnetthespire.commands.arguments.ArgumentType;
 import telnetthespire.commands.arguments.KeyArguments;
 import telnetthespire.commands.handlers.Key;
