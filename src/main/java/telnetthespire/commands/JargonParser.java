@@ -12,10 +12,11 @@ import telnetthespire.commands.parsers.StSJargonParser;
 
 import java.nio.CharBuffer;
 import java.util.Vector;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class JargonParser {
 
-    static final char START_SYMBOL = '.';
 
     public static Vector<Command> parse(String input) throws InvalidCommandException {
         try {
@@ -33,9 +34,11 @@ public class JargonParser {
     }
 
     public static ParseTree createTree (String input) {
-        CommonTokenStream tokens = new CommonTokenStream(createLexer(input));
-        StSJargonParser parser = new StSJargonParser(tokens);
-        return parser.order();
+        return createParser(input).order();
+    }
+
+    public static StSJargonParser createParser (String input) {
+        return new StSJargonParser(new CommonTokenStream(createLexer(input)));
     }
 
     public static StSJargonLexer createLexer(String input) {
@@ -44,13 +47,19 @@ public class JargonParser {
                  CodePointBuffer.withChars(prepareInput(input))));
     }
 
-    public static CharBuffer prepareInput (String rawInput) {
-        boolean missingStartSymbol = !rawInput.startsWith(String.valueOf(START_SYMBOL));
-        int bufferSize = rawInput.length() + (missingStartSymbol ? 1 : 0);
-        CharBuffer buffer = CharBuffer.allocate(bufferSize);
-        if (missingStartSymbol) buffer.append(START_SYMBOL);
-        buffer.append(rawInput).rewind();
-        return buffer;
+    public static CharBuffer prepareInput (String input) {
+        return (CharBuffer) createBuffer(isMissingStartSymbol.test(input), input.length())
+            .append(input)
+            .rewind();
     }
 
+    private static CharBuffer createBuffer (boolean missingStartSymbol, int inputLength) {
+        CharBuffer buffer = CharBuffer.allocate(missingStartSymbol ? inputLength + 1 : inputLength);
+        return missingStartSymbol
+            ? buffer.append(START_SYMBOL)
+            : buffer;
+    }
+
+    private static final char START_SYMBOL = '.';
+    private static final Predicate<String> isMissingStartSymbol = Pattern.compile("^[^" + START_SYMBOL + "]").asPredicate();
 }
