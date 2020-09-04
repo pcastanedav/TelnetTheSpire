@@ -1,6 +1,8 @@
 package telnetthespire.commands;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,8 +10,14 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.CharBuffer;
+import java.util.regex.Pattern;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.*;
+import static telnetthespire.matchers.ValidateOrder.validateOrder;
 
 class JargonParserTest {
 
@@ -32,33 +40,22 @@ class JargonParserTest {
 
     @Test
     void emptyOrder () {
-        assertOrder(
-                "An empty order is not expected",
-                "",
-                "(order (command commandName))",
-                "mismatched input '<EOF>' expecting '.'"
+        assertThat(
+            "An empty order produces a parsing error",
+            "",
+            validateOrder("(order (command commandName))")
+                .watching(errContent)
+                .withErrorMatching("input '<EOF>' expecting '.'")
         );
     }
 
     @Test
     void singleCommand () {
-        assertOrder(
-            "",
+        assertThat(
+            "Command with no arguments",
             "play",
-            "(order (command (commandName . play)))",
-            ""
-        );
-    }
-
-    private void assertOrder (String message, String order,String expectedTree, String expectedError) {
-        assertAll(
-            message,
-            () -> {
-                ParseTree tree = JargonParser.createTree(order);
-                String parsed = tree.toStringTree(JargonParser.createParser(order));
-                assertEquals(expectedTree, parsed);
-            },
-                () -> assertTrue(errContent.toString().contains(expectedError))
+            validateOrder("(order (command (commandName . play)))")
+                .watching(errContent)
         );
     }
 
