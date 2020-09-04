@@ -1,8 +1,5 @@
 package telnetthespire.commands;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,12 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.CharBuffer;
-import java.util.regex.Pattern;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.*;
 import static telnetthespire.matchers.ValidateOrder.validateOrder;
 
@@ -50,12 +43,32 @@ class JargonParserTest {
     }
 
     @Test
-    void singleCommand () {
+    void commandWithNoArguments () {
         assertThat(
             "Command with no arguments",
             "play",
             validateOrder("(order (command (commandName . play)))")
                 .watching(errContent)
+        );
+    }
+
+    @Test
+    void commandWithArguments () {
+
+        assertThat(
+           "Command with a natural argument",
+           "choose 1",
+            validateOrder("(order (command (commandName . choose) (argument (naturalArgument 1))))").watching(errContent)
+        );
+        assertThat(
+                "Command with a float argument",
+                "choose 1.3",
+                validateOrder("(order (command (commandName . choose) (argument (floatArgument 1.3))))").watching(errContent)
+        );
+        assertThat(
+                "Command with a text argument",
+                "start silent",
+                validateOrder("(order (command (commandName . start) (argument (textArgument silent))))").watching(errContent)
         );
     }
 
