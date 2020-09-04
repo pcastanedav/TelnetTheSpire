@@ -13,6 +13,7 @@ public class ValidateOrder extends TypeSafeMatcher<String> {
 
     private ByteArrayOutputStream errorStream;
     private Pattern expectedError = Pattern.compile("^$", Pattern.DOTALL);
+    private String parsedOrder;
     private String expectedTree;
     private boolean failedToMatchError = false;
 
@@ -33,15 +34,17 @@ public class ValidateOrder extends TypeSafeMatcher<String> {
     @Override
     protected boolean matchesSafely(String order) {
         ParseTree tree = JargonParser.createTree(order);
-        String parsed = tree.toStringTree(JargonParser.createParser(order));
+        parsedOrder = tree.toStringTree(JargonParser.createParser(order));
         String error = errorStream.toString();
         failedToMatchError = !expectedError.matcher(error).matches();
-        return expectedTree.contentEquals(parsed) && !failedToMatchError;
+        return expectedTree.contentEquals(parsedOrder) && !failedToMatchError;
     }
 
     @Override
     public void describeTo(Description description) {
         description.appendText(expectedTree);
+        description.appendText("\nParsed Tree: ");
+        description.appendText(parsedOrder);
         if (failedToMatchError) {
             description.appendText("\nExpected Error: ");
             description.appendValue(expectedError);
